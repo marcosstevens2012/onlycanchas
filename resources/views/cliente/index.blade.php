@@ -5,12 +5,12 @@
                         <!--breadcrumbs start -->
                         <ul class="breadcrumb">
                             <li><a href="#">Escritorio</a></li>
-                            <li>Usuarios</li>
-                            <li class="active">Usuarios</li>
+                            <li>Cliente</li>
+                            <li class="active">Clientes</li>
                         </ul>
                         <!--breadcrumbs end -->
 
-                    <h1 class="h1">Usuario<button type="button" class="nueva btn btn-primary btn-3d" href="javascript:void(0)" id="createNewCliente">Nuevo</button></h1>
+                    <h1 class="h1">Cliente<button type="button" class="nueva btn btn-primary btn-3d" href="javascript:void(0)" id="createNewCliente">Nuevo</button></h1>
                 </div>
      </div>
 
@@ -18,7 +18,7 @@
                     <div class="col-md-12">
                         <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h3 class="panel-title">Usuarios Registrados</h3>
+                            <h3 class="panel-title">Clientes Registrados</h3>
                             <div class="actions pull-right">
                                 <i class="fa fa-chevron-down"></i>
                                 <i class="fa fa-times"></i>
@@ -52,31 +52,38 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel"> Nuevo Usuario</h4>
+                    <h4 class="modal-title" id="myModalLabel">Nuevo Cliente</h4>
                 </div>
                 <div class="modal-body">
 
                     <form class="form-horizontal" method="POST" id="clienteForm" role="form">
-                        <input type="hidden" name="user_id" id="user_id">
+                        <input type="hidden" name="cliente_id" id="cliente_id">
 
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" required="" id="nombre" name="nombre" placeholder="Nombre">
+                                <input type="text" class="nombre form-control" required="" id="nombre" name="nombre" placeholder="Nombre" style="text-transform:uppercase;" onkeyup="aMays(event, this); this.value=this.value.replace(/[^a-zA-Z]/g,'');"onblur="aMays(event, this)">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-2 control-label">Apellido</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" required="" id="apellido" name="apellido" placeholder="Apellido">
+                                <input type="text" class="form-control" required="" id="apellido" name="apellido" placeholder="Apellido" style="text-transform:uppercase;" onkeyup="aMays(event, this); this.value=this.value.replace(/[^a-zA-Z]/g,'');"onblur="aMays(event, this)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Dni</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" required="" id="dni" name="dni" placeholder="Dni">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="inputPassword3" class="col-sm-2 control-label">Mail</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" required="" id="mail" name="mail" placeholder="Mail">
+                                <input type="mail" class="form-control" required="" id="mail" name="mail" placeholder="Mail">
                             </div>
                         </div>
 
@@ -97,7 +104,6 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-
                     <button type="button" class="btn btn-primary" id="saveBtn" >Guardar</button>
                 </div>
             </div>
@@ -111,6 +117,26 @@
     <script src="{{asset('/js/application.js')}}"></script>
     <script src="{{asset('plugins/dataTables/js/jquery.dataTables.js')}}"></script>
     <script src="{{asset('plugins/dataTables/js/dataTables.bootstrap.js')}}"></script>
+
+
+  <script type="text/javascript">
+    //PONER EN MAYUSCULA LOS INPUTS
+  function aMays(e, elemento) {
+  tecla=(document.all) ? e.keyCode : e.which; 
+   elemento.value = elemento.value.toUpperCase();
+  }
+
+
+
+  $(".nombre").on("input", function(){
+    var regexp = /[^a-zA-Z]/g;
+    if($(this).val().match(regexp)){
+      $(this).val( $(this).val().replace(regexp,''));
+    }
+  });
+
+
+  </script>
 <script>
 
 
@@ -144,10 +170,26 @@
 
         $('#createNewCliente').click(function () {
             $('#saveBtn').val("create-product");
-            $('#user_id').val('');
-            $('#userForm').trigger("reset");
-            $('#modelHeading').html("Create New Product");
+            $('#cliente_id').val('');
+            $('#clienteForm').trigger("reset");
+            $('#myModalLabel').html("Crear Cliente");
             $('#ajaxModel').modal('show');
+        });
+
+        $('body').on('click', '.editCliente', function () {
+            var cliente_id = $(this).data('id');
+            $.get("{{ route('cliente.index') }}" +'/' + cliente_id +'/edit', function (data) {
+          $('#myModalLabel').html("Editar Cliente");
+          $('#saveBtn').val("edit-cliente");
+          $('#ajaxModel').modal('show');
+          $('#cliente_id').val(data.id);
+          $('#nombre').val(data.nombre);
+          $('#apellido').val(data.apellido);
+          $('#dni').val(data.documento);
+          $('#telefono').val(data.telefono);
+          $('#direccion').val(data.direccion);
+          $('#mail').val(data.email);
+            })
         });
 
 
@@ -166,43 +208,32 @@
                     
                       $('#userForm').trigger("reset");
                       $('#ajaxModel').modal('hide');
-                      swal('guardado con exito');
-                      table.draw();
+                      swal({
+                          title: 'Bien!',
+                          text: 'Cliente Creado Correctamente',
+                          type: 'success',
+                          confirmButtonText: 'Genial'
+                            })
+                    table.draw();
+                      $('#saveBtn').html('Guardar');
                       
                  
                   },
                   error: function (data) {
                       console.log('Error:', data);
-                      $('#saveBtn').html('Save Changes');
+                      $('#saveBtn').html('Guardar');
                   }
             });
         });
 
-        $('body').on('click', '.deleteuser', function () {
+        $('body').on('click', '.deleteCliente', function () {
      
-        var userid = $(this).data("id");
-        confirm("Seguro que desea suspender user?!");
+        var clienteid = $(this).data("id");
+        confirm("Seguro que desea suspender cliente?!");
       
         $.ajax({
             type: "DELETE",
-            url: "{{ route('users.store') }}"+'/'+userid,
-            success: function (data) {
-                table.draw();
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
-            });
-        });
-
-        $('body').on('click', '.activeuser', function () {
-     
-        var userid = $(this).data("id");
-        confirm("Seguro que desea suspender user?!");
-      
-        $.ajax({
-            type: "DELETE",
-            url: "{{ route('users.store') }}"+'/'+userid,
+            url: "{{ route('cliente.store') }}"+'/'+clienteid,
             success: function (data) {
                 table.draw();
             },

@@ -37,10 +37,30 @@ Route::resource('complejo','ComplejoController');
 //USUARIOS
 Route::resource('users','UsuarioController');
 
-//USUARIOS
+//CLIENTE
 Route::resource('cliente','ClienteController');
 
+//TURNO FUTBOL
+Route::resource('turnofutbol','TurnoFutbolController');
+Route::post('/actualizar','TurnoFutbolController@actualizar')->name('turnofutbol.actualizar');
+Route::get('/buscarFecha','TurnoFutbolController@buscarFecha');
+Route::get('/buscarHorarioFutbol','TurnoFutbolController@buscarHorarioFutbol');
+Route::resource('turnofutbol/grilla/index', 'GrillaFutbolController');
+
+
+//TTURNO PADLE
+Route::resource('turno','TurnoPadleController');
+Route::get('/buscarHorario','TurnoController@buscarHorario');
+Route::get('/cancelar','TurnoController@cancelar');
+Route::get('/buscarHorario2','TurnoController@buscarHorario2');
+Route::get('/buscarFecha2','TurnoController@buscarFecha2');
+
+
+
+
 Route::get('usuario/{id}','UsuarioController@update');
+
+
 Route::get('error', function(){ 
     abort(500);
 });

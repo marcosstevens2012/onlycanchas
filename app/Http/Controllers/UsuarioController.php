@@ -55,10 +55,17 @@ class UsuarioController extends Controller
     	$usuario = new User;
     	$usuario->name=$request->get('name');
     	$usuario->email=$request->get('email');
+        $usuario->email=$request->get('telefono');
+        $usuario->tipo=$request->get('tipo');
+        $usuario->email=$request->get('email');
     	$usuario->password=bcrypt($request->get('password'));
     	$usuario->save();
-    	return Redirect::to('configuracion/usuario');
+
+
+    	return response()->json(['success'=>'Usuario saved successfully.']);
     }
+
+    
     public function edit($id){
     	return view("configuracion.usuario.edit",["usuario"=>User::findOrFail($id)]);
     }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TurnosFutbol extends Model
+class Horarios extends Model
 {
-    //
+    protected $table = 'horarios';
 }

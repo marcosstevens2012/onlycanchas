@@ -51,7 +51,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel"> Nuevo Usuario</h4>
+                    <h4 class="modal-title" id="myModalLabel">Nuevo Usuario</h4>
                 </div>
                 <div class="modal-body">
 
@@ -64,6 +64,15 @@
                                 <input type="text" class="form-control" required="" id="nombre" name="nombre" placeholder="Nombre">
                             </div>
                         </div>
+
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Apellido</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" required="" id="Apellido" name="Apellido" placeholder="Apellido">
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="inputPassword3" class="col-sm-2 control-label">Mail</label>
                             <div class="col-sm-10">
@@ -111,7 +120,6 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
-                        
                     </form>
                 </div>
                 <div class="modal-footer">

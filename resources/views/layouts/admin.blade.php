@@ -4,7 +4,7 @@
 
   	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>onlycanchas</title>
+    <title>PlayerOne</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -44,7 +44,7 @@
         <header id="header">
             <!--logo start-->
             <div class="brand">
-                <a href="index.html" class="logo"><span>only</span>T</a>
+                <a href="index.html" class="logo"><span>Player</span>One</a>
             </div>
             <!--logo end-->
             <div class="toggle-navigation toggle-left">
@@ -98,25 +98,21 @@
                     <li class="sub-menu">
                         <a href="javascript:void(0);"><i class="fa fa-cogs"></i><span>Turnos Futbol</span><i class="arrow fa fa-angle-right pull-right"></i></a>
                         <ul>
-
-                            <li><a href="ui-alerts-notifications.html">Mis Turnos</a>
+                            
+                            <li><a href="turnofutbol">Lista Turnos </a>
                             </li>
-                            <li><a href="ui-panels.html">Nuevo Turno</a>
+                            <li><a href="grillaturnofutbol">Grilla Turnos </a>
                             </li>
-                            <li><a href="ui-buttons.html">Turnos</a>
-                            </li>
-                        
+    
                         </ul>
                     </li>
                     <li class="sub-menu">
                         <a href="javascript:void(0);"><i class="fa fa-cogs"></i><span>Turnos Padle</span><i class="arrow fa fa-angle-right pull-right"></i></a>
                         <ul>
-
-                            <li><a href="ui-alerts-notifications.html">Mis Turnos</a>
+                            
+                            <li><a href="turno">Turnos</a>
                             </li>
-                            <li><a href="ui-panels.html">Nuevo Turno</a>
-                            </li>
-                            <li><a href="ui-buttons.html">Turnos</a>
+                            <li><a href="grillaturno">Grilla Turnos </a>
                             </li>
                         
                         </ul>

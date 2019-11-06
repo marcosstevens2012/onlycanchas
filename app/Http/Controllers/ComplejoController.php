@@ -70,7 +70,7 @@ class ComplejoController extends Controller
         $complejo->save();
 
 
-        return response()->json(['success'=>'Product saved successfully.']);
+        return response()->json(['success'=>'Complejo guardado.']);
  //redirecciona a la vista cliente
 
     }
@@ -106,7 +106,7 @@ class ComplejoController extends Controller
                 $complejo->estado='Inactivo';
                 $complejo->update();
             
-                return response()->json(['success'=>'complejo Suspendida']);
+                return response()->json(['success'=>'Complejo Suspendido']);
             }
 
 
@@ -115,7 +115,7 @@ class ComplejoController extends Controller
                 $complejo->estado='Activo';
                 $complejo->update();
             
-                return response()->json(['success'=>'complejo Activada']);
+                return response()->json(['success'=>'Complejo Activado']);
             }
             
         
