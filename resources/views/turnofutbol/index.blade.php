@@ -14,6 +14,13 @@
                 </div>
      </div>
 
+    <div class="row" id="crud">
+                    <div class="col-md-12">
+                        <input type="date" name="fechab" id="fechab" class="fechab">
+                        <h1 class="h1"><button type="button" class="btn btn-primary btn-3d buscarTurno" href="javascript:void(0)" id="buscarTurno">Buscar</button></h1>
+                    </div>
+     </div>
+
 	<div class="row" >
                     <div class="col-md-12">
                         <div class="panel panel-default">
@@ -145,49 +152,9 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ajaxModeledit"  role="dialog" aria-labelledby="myModalLabeledit" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabeledit"></h4>
-                </div>
-                <div class="modal-body">
-
-                    <form class="form-horizontal" method="POST" id="turnoFormedit" role="form">
-                        <input type="hidden" name="turno_id_edit" id="turno_id_edit">
-
-                
-
-                        
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">Estado</label>
-                            <div class="col-sm-10">
-                                <select name="estado" id="estado"  class="estado form-control select2-single" style="width:100%">
-                                    <option>Seleccione Estado</option>
-                                     @foreach($estados as $e)
-                                        <option value="{{$e->id}}">{{$e->estado}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        
 
 
-                    
-                    </form>
-                </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-primary" id="saveBtnedit" >Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-     <div class="modal fade" id="ajaxModelcliente"  role="dialog" aria-labelledby="myModalLabelcliente" aria-hidden="true">
+    <div class="modal fade" id="ajaxModelcliente"  role="dialog" aria-labelledby="myModalLabelcliente" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -268,7 +235,7 @@
             });
 
 
-
+        var fechab = $('.fechab').val();
         var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
@@ -287,6 +254,7 @@
         
             $('#example').dataTable();
 
+            //crear nuevo turno
             $('#createNewTurno').click(function () {
                 $('#saveBtn').val("create-product");
                 $('#turno_id').val('');
@@ -295,6 +263,7 @@
                 $('#ajaxModel').modal('show');
             });
 
+            //crear nuevo cliente
             $('#createNewCliente').click(function () {
                 //$('#ajaxModel').modal('hide');
                 $('#saveBtncliente').val("create-cliente");
@@ -305,19 +274,6 @@
 
             });
 
-            //FORMULARIO EDIT
-            $('body').on('click', '.editTurno', function () {
-              var turno_id = $(this).data('id');
-             
-              $.get("{{ route('turnofutbol.index') }}" +'/' + turno_id +'/edit', function (data) {
-                  $('#modelHeading').html("Edit Product");
-                  $('#saveBtn').val("edit-turno");
-                  $('#ajaxModeledit').modal('show');
-                  $('#turno_id_edit').val(turno_id);
-
-            
-              })
-           });
             //GUARDAR CLIENTE
 
         $('#saveBtncliente').click(function (e) {
@@ -359,7 +315,7 @@
             });
         });
 
-        //GUARDAR
+        //GUARDAR TURNO
         $('#saveBtn').click(function (e) {
 
             
@@ -395,52 +351,31 @@
             });
         });
 
-        //EDITAR
 
-        $('#saveBtnedit').click(function (e) {
+        //FINALIZAR TURNO 
+        $('body').on('click', '.finalizarTurno', function () {
+     
+        var turnoid = $(this).val();
 
-            
-            e.preventDefault();
-            $(this).html('Enviando..');
-            
-            $.ajax({
-                  data: $('#turnoFormedit').serialize(),
-                  url: "{{ route('turnofutbol.actualizar') }}",
-                  type: "POST",
-                  dataType: 'json',
-                  success: function (data) {
+        
+        confirm("Seguro que desea finalizar el turno?!");
+      
+        $.ajax({
+                type:'POST',
+                url: "{{ route('turnofutbol.finalizarturnof') }}",
+                data:{'id': turnoid},
+                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+                success:function(data){
                     
-                      $('#turnoFormedit').trigger("reset");
-                      $('#ajaxModeledit').modal('hide');
-                      swal({
+                swal({
                           type: 'success',
-                          title: 'Turno Editado',//carga el titulo con lo q hay en el input notice
+                          title: 'Turno Finalizado',//
                           showConfirmButton:true,
                           confirmButtonText:"Aceptar",
                           width:"30%",
                           padding: '10em',
                           showLoaderOnConfirm: true,
                         });
-                      table.draw();
-                      
-                 
-                  },
-                  error: function (data) {
-                      console.log('Error:', data);
-                      $('#saveBtn').html('Guardar Cambios');
-                  }
-            });
-        });
-
-        $('body').on('click', '.deleteTurno', function () {
-     
-        var turnoid = $(this).data("id");
-        confirm("Seguro que desea suspender turno?!");
-      
-        $.ajax({
-            type: "DELETE",
-            url: "{{ route('turnofutbol.store') }}"+'/'+turnoid,
-            success: function (data) {
                 table.draw();
             },
             error: function (data) {
@@ -449,15 +384,28 @@
             });
         });
 
-        $('body').on('click', '.activeCancha', function () {
+        //FINALIZAR TURNO FIJO
+    $('body').on('click', '.finalizarFijo', function () {
      
-        var turnoid = $(this).data("id");
-        confirm("Seguro que desea suspender cancha?!");
+        var turnoid = $(this).val();
+        confirm("Seguro que desea finalizar el turno fijo?!");
       
         $.ajax({
-            type: "DELETE",
-            url: "{{ route('cancha.store') }}"+'/'+canchaid,
-            success: function (data) {
+                type:'POST',
+                url: "{{ route('turnofutbol.finalizarturnoff') }}",
+                data:{'id': turnoid},
+                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+                success:function(data){
+                    
+                swal({
+                          type: 'success',
+                          title: 'Turnos Finalizados',//
+                          showConfirmButton:true,
+                          confirmButtonText:"Aceptar",
+                          width:"30%",
+                          padding: '10em',
+                          showLoaderOnConfirm: true,
+                        });
                 table.draw();
             },
             error: function (data) {
@@ -465,12 +413,85 @@
             }
             });
         });
+
+
+    $('body').on('click', '.confirmarTurno', function () {
+     
+        var turnoid = $(this).val();
+        confirm("Seguro que desea confirmar el turno?");
+      
+        $.ajax({
+                type:'POST',
+                url: "{{ route('turnofutbol.confirmarturnof') }}",
+                data:{'id': turnoid},
+                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+                success:function(data){
+                    
+                swal({
+                          type: 'success',
+                          title: 'Turnos Confirmado',//
+                          showConfirmButton:true,
+                          confirmButtonText:"Aceptar",
+                          width:"30%",
+                          padding: '10em',
+                          showLoaderOnConfirm: true,
+                        });
+                table.draw();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+            });
+        });
+
+    $('body').on('click', '.encanchaTurno', function () {
+     
+        var turnoid = $(this).val();
+        confirm("Seguro que desea cambiar estado?");
+      
+        $.ajax({
+                type:'POST',
+                url: "{{ route('turnofutbol.encancha') }}",
+                data:{'id': turnoid},
+                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+                success:function(data){
+                    
+                swal({
+                          type: 'success',
+                          title: 'Turnos Confirmado',//
+                          showConfirmButton:true,
+                          confirmButtonText:"Aceptar",
+                          width:"30%",
+                          padding: '10em',
+                          showLoaderOnConfirm: true,
+                        });
+                table.draw();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+            });
+        });
+
+
+    $('body').on('click', '.buscarTurno', function () {
+     
+        
+                var fecha = $('.fecha').val();
+            
+
+        
+            
+        
+                table.draw();
+            
+        });
+
     });
 
         
+</script>
 
-
-    </script>
 <script type="text/javascript">
     function CheckTime(str) 
             { 
@@ -644,6 +665,7 @@
 
 </script> 
 
+
 <script type="text/javascript">
     //PONER EN MAYUSCULA LOS INPUTS
 function aMays(e, elemento) {
@@ -681,6 +703,8 @@ $(".nombre").on("input", function(){
             });
         });
 </script>
+
+
 <script>
         
         $(document).ready(function() {
@@ -698,6 +722,7 @@ $(".nombre").on("input", function(){
 
     });
 </script>
+
 
 <script type="text/javascript">
     $(document).ready(function(){

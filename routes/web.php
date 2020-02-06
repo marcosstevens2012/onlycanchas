@@ -43,15 +43,23 @@ Route::resource('cliente','ClienteController');
 //TURNO FUTBOL
 Route::resource('turnofutbol','TurnoFutbolController');
 Route::post('/actualizar','TurnoFutbolController@actualizar')->name('turnofutbol.actualizar');
+Route::post('/finalizarturnof','TurnoFutbolController@finalizarturnof')->name('turnofutbol.finalizarturnof');
+Route::post('/finalizarturnoff','TurnoFutbolController@finalizarturnoff')->name('turnofutbol.finalizarturnoff');
+Route::post('/confirmarturnof','TurnoFutbolController@confirmarturnof')->name('turnofutbol.confirmarturnof');
+Route::post('/encancha','TurnoFutbolController@encancha')->name('turnofutbol.encancha');
+
 Route::get('/buscarFecha','TurnoFutbolController@buscarFecha');
 Route::get('/buscarHorarioFutbol','TurnoFutbolController@buscarHorarioFutbol');
-Route::resource('turnofutbol/grilla/index', 'GrillaFutbolController');
+Route::resource('grillaturnofutbol', 'GrillaFutbolController');
 
 
 //TTURNO PADLE
 Route::resource('turno','TurnoPadleController');
 Route::get('/buscarHorario','TurnoController@buscarHorario');
 Route::get('/cancelar','TurnoController@cancelar');
+
+
+
 Route::get('/buscarHorario2','TurnoController@buscarHorario2');
 Route::get('/buscarFecha2','TurnoController@buscarFecha2');
 

@@ -31,7 +31,7 @@ class TurnoFutbolController extends Controller
         
         ->get();
 
-
+        //dd($turnos);
 
         $estados = DB::table('estado_turno')->get();
         $clientes = Persona::all();
@@ -46,30 +46,78 @@ class TurnoFutbolController extends Controller
 
         $fechaact=Carbon::now();
         $fechaact = $fechaact->format('Y-m-d');
+
+        $fecha = $request->fechab;
         
         if ($request->ajax()) {
 
-            
-        $data = DB::table('turnofutbol')
-        ->join('persona', 'persona.id', '=', 'turnofutbol.idcliente')
-        ->join('cancha','cancha.id','=','turnofutbol.idcancha')
-        ->join('estado_turno','estado_turno.id','=','turnofutbol.idestado')
-        ->select('turnofutbol.*','persona.*','cancha.*','estado_turno.estado as estadot',DB::raw('CONCAT(persona.nombre, " ",persona.apellido) AS cliente'))
-        ->orderBy('turnofutbol.created_at', 'desc')
-        ->get();
+        if ($fecha != null) {
+            $data = DB::table('turnofutbol')
+                ->join('persona', 'persona.id', '=', 'turnofutbol.idcliente')
+                ->join('cancha','cancha.id','=','turnofutbol.idcancha')
+                ->join('estado_turno','estado_turno.id','=','turnofutbol.idestado')
+                ->select('turnofutbol.*','persona.*','cancha.*','turnofutbol.id as idturno','estado_turno.estado as estadot',DB::raw('CONCAT(persona.nombre, " ",persona.apellido) AS cliente'))
+                ->where('turnofutbol.fecha', $fecha)
+                ->where('turnofutbol.idestado','!=','6')
+                ->where('turnofutbol.idestado','!=','2')
+                ->get();
+            # code...
+        }
 
-        //var_dump($data);
+        if ($fecha == null) {
+            $data = DB::table('turnofutbol')
+                ->join('persona', 'persona.id', '=', 'turnofutbol.idcliente')
+                ->join('cancha','cancha.id','=','turnofutbol.idcancha')
+                ->join('estado_turno','estado_turno.id','=','turnofutbol.idestado')
+                ->select('turnofutbol.*','persona.*','cancha.*','turnofutbol.id as idturno','estado_turno.estado as estadot',DB::raw('CONCAT(persona.nombre, " ",persona.apellido) AS cliente'))
+                ->where('turnofutbol.fecha', $fechaact)
+                ->where('turnofutbol.idestado','!=','6')
+                ->where('turnofutbol.idestado','!=','2')
+                ->get();
+            # code...
+        }
+        
+
+        
 
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-   
-                                $btn = ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-primary btn-3d editTurno">Editar</button>';
+
+                                
 
 
-                                $btn = $btn .  ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-3d deleteCliente">Finalizar</button>';
+                            
+
+
+                                    if ($row->estadot == 'Pendiente'){  
+                                        $btn = '<button href="javascript:void(0)" data-toggle="tooltip" type="button" value="'.$row->idturno.'" data-id="'.$row->idturno.'" data-original-title="Edit" class="btn btn-success btn-3d confirmarTurno">Confirmar</button>';
+
+                                    }
+
+                                    if ($row->estadot == 'Confirmado'){  
+                                        $btn = '<button href="javascript:void(0)" data-toggle="tooltip" type="button" value="'.$row->idturno.'" data-id="'.$row->idturno.'" data-original-title="Edit" class="btn btn-success btn-3d encanchaTurno">En Cancha</button>';
+
+                                    }
+
+                                    if ($row->estadot == 'En Cancha'){  
+                                        $btn = '<button href="javascript:void(0)" data-toggle="tooltip" type="button" value="'.$row->idturno.'" data-id="'.$row->id.'" data-original-title="finalizarTurno" class="btn btn-danger btn-3d finalizarTurno">Cancelar</button>';
+
+                                    }
+
+
+
+                                    if ($row->estadot != 'Finalizado') {
+                                        # code...
+                                    
+                                    $btn = $btn .  ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" value="'.$row->idturno.'" data-id="'.$row->id.'" data-original-title="finalizarTurno" class="btn btn-danger btn-3d finalizarTurno">Finalizar</button>';
+                                    }
+
+                                
+
+
                                 if ($row->turnofijo =='1'){
-                                $btn = $btn .  ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->id.'" data-original-title="Finfijo" class="btn btn-danger btn-3d deleteCliente">Finalizar Fijo</button>';
+                                $btn = $btn .  ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->idturno.'" data-original-title="Finfijo" class="btn btn-danger btn-3d finalizarFijo">Finalizar Fijo</button>';
                                 }
                             
                             return $btn;
@@ -80,14 +128,14 @@ class TurnoFutbolController extends Controller
                                 if ($row->estadot=='En Cancha'){
                                     $btn = '<td align="center"><button type="button" class="btn btn-info btn-3d">'.$row->estadot.'</button>';
                                       if ($row->turnofijo =='1'){
-                                          $btn = $btn . ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-primary btn-3d editTurno">Turno Fijo</button>';
+                                          $btn = $btn . ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->idturno.'" data-original-title="Edit" class="btn btn-primary btn-3d ">Turno Fijo</button>';
                                       }
                                 }
                                
                                 elseif ($row->estadot=='Pendiente'){
                                     $btn = '<td align="center"><button type="button" class="btn btn-warning btn-3d">'.$row->estadot.'</button>';
                                         if ($row->turnofijo =='1'){
-                                            $btn = $btn . ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-primary btn-3d editTurno">Turno Fijo</button>';
+                                            $btn = $btn . ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->idturno.'" data-original-title="Edit" class="btn btn-primary btn-3d ">Turno Fijo</button>';
                                         }
                                        
                                 }
@@ -95,7 +143,7 @@ class TurnoFutbolController extends Controller
                                 else{
                                     $btn = '<td align="center"><button type="button" class="btn btn-success btn-3d">'.$row->estadot.'</button>';
                                         if ($row->turnofijo =='1'){
-                                            $btn = $btn . ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-primary btn-3d editTurno">Turno Fijo</button>';
+                                            $btn = $btn . ' <button href="javascript:void(0)" data-toggle="tooltip" type="button" data-id="'.$row->idturno.'" data-original-title="Edit" class="btn btn-primary btn-3d ">Turno Fijo</button>';
                                         }
                                         
                                 }
@@ -116,6 +164,48 @@ class TurnoFutbolController extends Controller
         //dd($data);
       
         return view('turnofutbol.index',compact('turnos','clientes','canchas','horarios','fechamax','estados'));
+    }
+
+
+    public function buscarTurnosFutbol(Request $request){
+
+            $fechaact=Carbon::now();
+            $fechaact = $fechaact->format('Y-m-d');
+
+            
+            $fecha=trim($request->get('fecha'));
+            if( $fecha == ""){
+          
+            $turnos=DB::table('turnofutbol as t')
+                    ->join('persona', 'persona.id', '=', 't.idcliente')
+                    ->join('cancha','cancha.id','=','t.idcancha')
+                    ->join('estado_turno','estado_turno.id','=','t.idestado')
+                    ->where('t.idestado','!=','2')
+                    ->where('t.idestado','!=','6')
+                    ->where('t.idcancha','=',$request->idcancha)
+                    ->where('t.fecha','=',$fechaact)
+                    ->orderBy('t.hora_inicio', 'asc')
+                ->get();
+
+            }
+
+            if( $fecha != ""){
+
+                $turnos=DB::table('turnofutbol as t')
+                    ->join('cliente as cli','cli.id','=','t.idcliente')
+                    ->join('persona as p','p.id','=','cli.idpersona')
+                    ->join('estado_turno as est','t.idestado','=','est.id')
+                    ->where('t.idestado','!=','2')
+                    ->where('t.idestado','!=','6')
+                    ->where('t.idcancha','=',$request->idcancha)
+                    ->where('t.fecha','=',$fecha)
+                    ->orderBy('t.hora_inicio', 'asc')
+                    
+                ->get();
+
+            }
+
+            return response()->json($turnos);
     }
     public function create()
     {
@@ -139,7 +229,7 @@ class TurnoFutbolController extends Controller
             ->where('fecha','=',$request->fecha)
             ->where('idcancha','=',$request->idcancha)
             ->where('idestado','!=','6')
-            ->where('t.idestado','!=',2)
+            ->where('idestado','!=','2')
             ->get();
 
             $data = DB::table('horariosfutbol')
@@ -258,32 +348,73 @@ class TurnoFutbolController extends Controller
 
          return response()->json(['success'=>'Product saved successfully.']);
     }
-    public function destroy($id)
+    public function finalizarturnof(Request $request)
     {
-        $cancha=Cancha::findOrFail($id);
+                
+                $id = $request->get('id');   
+                $turno = TurnoFutbol::findOrFail($id);
+                $turno->idestado = 6;
+                $turno->update();    
+
+                return response()->json(['success'=>'Turno Finalizado']);
+          
+    }
+
+
+    public function finalizarturnoff(Request $request)
+    {
+        
 
         //$estado = DB::table('turno')->select('idpaciente')->where('idpaciente','=',$id)->first();
         //dd($estado);
-            
-            if ($cancha->estado == 'Activo') {
+            $turno=TurnoFutbol::findOrFail($request->id);
 
-                $cancha->estado='Inactivo';
-                $cancha->update();
+
+            $turnos = DB::table('turnofutbol as t')
+            ->where('lote', '=', $turno->lote)
+            ->get();
             
-                return response()->json(['success'=>'Cancha Suspendida']);
+            foreach ($turnos as $tur) {
+                # code...
+            
+                $turno=TurnoFutbol::findOrFail($tur->idturno);
+                //dd($turno);
+                $turno->idestado=('6');
+                $turno->update();
             }
-
-
-            if ($cancha->estado == 'Inactivo') {
-
-                $cancha->estado='Activo';
-                $cancha->update();
-            
-                return response()->json(['success'=>'Cancha Activada']);
-            }
-            
+        
+            return response()->json(['success'=>'Turno Fijo Finalizado']);   
         
 
+    }
+
+    public function confirmarturnof(Request $request)
+    {
+        
+
+        //$estado = DB::table('turno')->select('idpaciente')->where('idpaciente','=',$id)->first();
+        //dd($estado);
+            $id = $request->get('id');   
+                $turno = TurnoFutbol::findOrFail($id);
+                $turno->idestado = 4;
+                $turno->update();    
+        
+            return response()->json(['success'=>'Turno Fijo Finalizado']);   
+        
+
+    }
+    public function encancha(Request $request)
+    {
+        
+
+        //$estado = DB::table('turno')->select('idpaciente')->where('idpaciente','=',$id)->first();
+        //dd($estado);
+            $id = $request->get('id');   
+                $turno = TurnoFutbol::findOrFail($id);
+                $turno->idestado = 3;
+                $turno->update();    
+        
+            return response()->json(['success'=>'Turno Fijo Finalizado']);   
         
 
     }

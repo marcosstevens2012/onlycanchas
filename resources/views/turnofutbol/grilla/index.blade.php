@@ -206,7 +206,7 @@
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 3, 'fecha':fecha},
+                data:{'idcancha': 1, 'fecha':fecha},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   
@@ -228,7 +228,7 @@
                       v=null;
                   }  
                     if (i < data.length) {
-                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 3){
+                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 1){
                           $(this).removeClass("btn-success");
                           $(this).addClass("btn-danger");
                           $(this).text($(this).val() + " "  + data[i].nombre);
@@ -249,7 +249,7 @@
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 4, 'fecha':fecha},
+                data:{'idcancha': 2, 'fecha':fecha},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   
@@ -290,7 +290,7 @@
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 5, 'fecha':fecha},
+                data:{'idcancha': 3, 'fecha':fecha},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   
@@ -331,7 +331,7 @@
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 7, 'fecha':fecha},
+                data:{'idcancha': 4, 'fecha':fecha},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   
@@ -371,7 +371,7 @@
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 8, 'fecha':fecha},
+                data:{'idcancha': 5, 'fecha':fecha},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   i = 0;
@@ -419,7 +419,7 @@
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 3},
+                data:{'idcancha': 1},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   
@@ -432,6 +432,87 @@
 
                  
 
+                  if (v != null) {
+                      $(this).removeClass("btn-success");
+                      $(this).addClass("btn-danger");
+                      $(this).text($(this).val() + " "  + v);
+                      v=null;
+                  }  
+                    if (i < data.length) {
+                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 1){
+                          $(this).removeClass("btn-success");
+                          $(this).addClass("btn-danger");
+                          $(this).text($(this).val() + " "  + data[i].nombre);
+                         
+
+                          v = (data[i].nombre);
+                           i++;
+                           
+                      }
+                    }   
+                });
+               }
+                
+                
+            });
+
+         $.ajax({
+
+                type:'get',
+                url:'{!!URL::to('buscarTurnosFutbol')!!}',
+                data:{'idcancha': 2},
+                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+                success:function(data){
+                  
+                  
+                   v=null;
+                  console.log(data);
+                  i = 0;
+
+                  $(".cancha2").each(function(){
+
+
+                 
+
+                  if (v != null) {
+                      $(this).removeClass("btn-success");
+                      $(this).addClass("btn-danger");
+                      $(this).text($(this).val() + " "  + v);
+                      v=null;
+                  }  
+                    if (i < data.length) {
+                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 2){
+                          $(this).removeClass("btn-success");
+                          $(this).addClass("btn-danger");
+                          $(this).text($(this).val() + " "  + data[i].nombre);
+                         
+
+                          v = (data[i].nombre);
+                           i++;
+                           
+                      }
+                    }   
+                });
+               }
+                
+                
+            });
+         $.ajax({
+
+                type:'get',
+                url:'{!!URL::to('buscarTurnosFutbol')!!}',
+                data:{'idcancha': 3},
+                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+                success:function(data){
+                  
+             v=null;
+                  console.log(data);
+                  i = 0;
+
+                  $(".cancha3").each(function(){
+
+
+                 
                   if (v != null) {
                       $(this).removeClass("btn-success");
                       $(this).addClass("btn-danger");
@@ -455,7 +536,6 @@
                 
                 
             });
-
          $.ajax({
 
                 type:'get',
@@ -464,15 +544,14 @@
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   
-                  
-                   v=null;
+             v=null;
                   console.log(data);
                   i = 0;
 
-                  $(".cancha2").each(function(){
+                  $(".cancha4").each(function(){
 
 
-                 
+                  
 
                   if (v != null) {
                       $(this).removeClass("btn-success");
@@ -497,91 +576,12 @@
                 
                 
             });
+
          $.ajax({
 
                 type:'get',
                 url:'{!!URL::to('buscarTurnosFutbol')!!}',
                 data:{'idcancha': 5},
-                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
-                success:function(data){
-                  
-             v=null;
-                  console.log(data);
-                  i = 0;
-
-                  $(".cancha3").each(function(){
-
-
-                 
-                  if (v != null) {
-                      $(this).removeClass("btn-success");
-                      $(this).addClass("btn-danger");
-                      $(this).text($(this).val() + " "  + v);
-                      v=null;
-                  }  
-                    if (i < data.length) {
-                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 5){
-                          $(this).removeClass("btn-success");
-                          $(this).addClass("btn-danger");
-                          $(this).text($(this).val() + " "  + data[i].nombre);
-                         
-
-                          v = (data[i].nombre);
-                           i++;
-                           
-                      }
-                    }   
-                });
-               }
-                
-                
-            });
-         $.ajax({
-
-                type:'get',
-                url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 7},
-                headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
-                success:function(data){
-                  
-             v=null;
-                  console.log(data);
-                  i = 0;
-
-                  $(".cancha4").each(function(){
-
-
-                  
-
-                  if (v != null) {
-                      $(this).removeClass("btn-success");
-                      $(this).addClass("btn-danger");
-                      $(this).text($(this).val() + " "  + v);
-                      v=null;
-                  }  
-                    if (i < data.length) {
-                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 7){
-                          $(this).removeClass("btn-success");
-                          $(this).addClass("btn-danger");
-                          $(this).text($(this).val() + " "  + data[i].nombre);
-                         
-
-                          v = (data[i].nombre);
-                           i++;
-                           
-                      }
-                    }   
-                });
-               }
-                
-                
-            });
-
-         $.ajax({
-
-                type:'get',
-                url:'{!!URL::to('buscarTurnosFutbol')!!}',
-                data:{'idcancha': 8},
                 headers:{'X-CSFR-TOKEN':$('meta[name="csrf-token"]').attr('content')},
                 success:function(data){
                   v=null;
@@ -600,7 +600,7 @@
                       v=null;
                   }  
                     if (i < data.length) {
-                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 8){
+                      if((data[i].hora_inicio) == $(this).val() && (data[i].idcancha) == 5){
                           $(this).removeClass("btn-success");
                           $(this).addClass("btn-danger");
                           $(this).text($(this).val() + " "  + data[i].nombre);

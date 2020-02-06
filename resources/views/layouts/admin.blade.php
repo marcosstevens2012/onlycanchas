@@ -132,6 +132,9 @@
                     <li class="">
                         <a href="users"><i class="fa fa-dashboard"></i><span>Usuarios</span></a>
                     </li>
+                    <li class="">
+                        <a href="horarios"><i class="fa fa-dashboard"></i><span>Horarios</span></a>
+                    </li>
                 </ul>
             </div>
 
